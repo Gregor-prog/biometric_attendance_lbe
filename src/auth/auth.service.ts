@@ -1,6 +1,6 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prismaModule/prisma.service';
-import { Injectable } from '@nestjs/common';
-import { IdentifyUserDto, RegisterDto } from './dto';
+import type { IdentifyUserDto, RegisterDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -14,18 +14,17 @@ export class AuthService {
         fingerHex: fingerBuffer,
       },
     });
-
     return enrollFinger.uniqueId;
   }
 
   async identify(identifyUserDto: IdentifyUserDto) {
-    const { fingerHex } = identifyUserDto;
-    const fingerBuffer = Buffer.from(fingerHex, 'hex');
-    const identifyUser = await this.prisma.user.findUnique({
-      where: {
-        fingerHex: fingerBuffer,
-      },
+    const fingerBuffer = Buffer.from(identifyUserDto.fingerHex, 'hex');
+    const user = await this.prisma.user.findUnique({
+      where: { fingerHex: fingerBuffer },
     });
-    return identifyUser;
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 }

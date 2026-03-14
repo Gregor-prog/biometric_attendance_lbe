@@ -1,8 +1,8 @@
 export interface RegisterDto {
-    uniqueId: string;
-    fingerHex: any;
+  uniqueId: string;
+  fingerHex: string;
 }
 
 export interface IdentifyUserDto {
-    fingerHex: any;
+  fingerHex: string;
 }

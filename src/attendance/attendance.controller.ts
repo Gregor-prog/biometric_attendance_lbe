@@ -6,13 +6,13 @@ import type { CreateAttendanceDto } from './dto';
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 
-  @Post('create')
+  @Post('clock-in')
   createAttendance(@Body() dto: CreateAttendanceDto) {
-    return this.attendanceService.createAttendance(dto.userId);
+    return this.attendanceService.createAttendance(dto.fingerHex);
   }
 
-  @Get('get/:userId')
-  getAttendance(@Param('userId') userId: string) {
-    return this.attendanceService.getAttendance(userId);
+  @Get('get/:uniqueId')
+  getAttendance(@Param('uniqueId') uniqueId: string) {
+    return this.attendanceService.getAttendance(uniqueId);
   }
 }

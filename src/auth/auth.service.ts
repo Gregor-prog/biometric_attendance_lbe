@@ -19,14 +19,23 @@ export class AuthService {
 
   async identify(identifyUserDto: IdentifyUserDto) {
     const fingerBuffer = Buffer.from(identifyUserDto.fingerHex, 'hex');
-    console.log('Identifying user with fingerHex:', identifyUserDto.fingerHex);
     const user = await this.prisma.user.findUnique({
       where: { fingerHex: fingerBuffer },
     });
-    console.log('User found:', user);
     if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
+  }
+
+  async getAllTemplates() {
+    const users = await this.prisma.user.findMany({
+      select: { uniqueId: true, fingerHex: true },
+    });
+    // Return fingerHex as hex string so hardware can use it directly
+    return users.map((u) => ({
+      uniqueId: u.uniqueId,
+      fingerHex: Buffer.from(u.fingerHex).toString('hex'),
+    }));
   }
 }

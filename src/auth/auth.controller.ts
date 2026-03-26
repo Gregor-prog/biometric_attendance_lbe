@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, BadRequestException } from '@nestjs/common';
 import type { IdentifyUserDto, RegisterDto } from './dto';
 import { AuthService } from './auth.service';
 
@@ -21,6 +21,11 @@ export class AuthController {
       message: 'User registered successfully',
       data: uniqueIdSuccess,
     };
+  }
+
+  @Get('templates')
+  async getTemplates() {
+    return this.authService.getAllTemplates();
   }
 
   @Post('identify')

@@ -1,3 +1,3 @@
 export interface CreateAttendanceDto {
-    userId: string;
+  fingerHex: string;
 }

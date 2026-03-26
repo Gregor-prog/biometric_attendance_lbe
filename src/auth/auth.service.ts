@@ -19,9 +19,11 @@ export class AuthService {
 
   async identify(identifyUserDto: IdentifyUserDto) {
     const fingerBuffer = Buffer.from(identifyUserDto.fingerHex, 'hex');
+    console.log('Identifying user with fingerHex:', identifyUserDto.fingerHex);
     const user = await this.prisma.user.findUnique({
       where: { fingerHex: fingerBuffer },
     });
+    console.log('User found:', user);
     if (!user) {
       throw new NotFoundException('User not found');
     }
